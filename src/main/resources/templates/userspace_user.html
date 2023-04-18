@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div class="userspace_content" th:fragment="userspace_content">
+    <div class="ui segment" id="userspace_content_title">
+        <h1>我的订单</h1>
+        <p class="description">在这里您能查看您所有的订单信息</p>
+    </div>
+    <div class="ui six item pointing menu">
+        <a class="item" th:href="@{'/home'}">所有订单</a>
+        <a class="item" th:href="@{'/home?menu=1'}">待商户确认的订单</a>
+        <a class="item" th:href="@{'/home?menu=2'}">待商户发货的订单</a>
+        <a class="item" th:href="@{'/home?menu=3'}">待确认收货的订单</a>
+        <a class="item" th:href="@{'/home?menu=4'}">已完成的订单</a>
+        <div class="ui category search item">
+                <div class="ui icon input">
+                    <input name="search_order" placeholder="在此搜索您的订单" type="search"><i class="search link icon"></i>
+                </div>
+        </div>
+    </div>
+    <div class="ui list">
+        <div class="ui segment">
+            <div class="item" th:each="order:${orderList}" th:id="${order.getOrder_id}">
+                <div class="ui segment">
+                    <h2 style="margin-top: 1em" th:text="'序号：'+${orderStat.count}"></h2>
+                    <div th:switch="${order.getOrder_status}">
+                        <p style="text-align: right" th:case="1" th:text="'创建时间：'+${order.getOrder_create_time}"></p>
+                        <p style="text-align: right" th:case="2" th:text="'接受时间：'+${order.getStall_accept_time}"></p>
+                        <p style="text-align: right" th:case="3" th:text="'发货时间：'+${order.getSend_time}"></p>
+                        <p style="text-align: right" th:case="4" th:text="'到货时间：'+${order.getArrive_time}"></p>
+                    </div>
+                    <div class="ui horizontal segments" style="margin: 0">
+                        <div class="ui red segment" style="flex-grow: 2">
+                            <p th:text="'订单号：'+${order.getOrder_id}">订单号</p>
+                        </div>
+                        <div class="ui red segment" style="flex-grow: 2">
+                            <p th:text="'商铺名：'+${stallList.get(orderStat.count-1).getStall_name}">商铺名</p>
+                        </div>
+                        <div class="ui red segment" style="flex-grow: 2" th:switch="${order.getOrder_status}">
+                            <p th:case="1">订单状态：等待商家确认</p>
+                            <p th:case="2">订单状态：等待商家发货</p>
+                            <p th:case="3">订单状态：等待用户收货</p>
+                            <p th:case="4">订单状态：已完成</p>
+                        </div>
+                        <div class="ui red segment" style="flex-grow: 1">
+                            <p th:text="'总价格：'+${order.getOrder_price}">总价格</p>
+                        </div>
+                        <div class="ui red segment" style="flex-grow: 2">
+                            <p th:text="'配送地址：'+${addressList.get(orderStat.count-1).getAddress_name}">配送地址</p>
+                        </div>
+                        <div class="ui red segment" style="flex-grow: 2" th:switch="${order.getOrder_status}">
+                            <span>操作：</span>
+                            <p th:case="1">无</p>
+                            <p th:case="2">无</p>
+                            <button class="ui basic primary button confirmReceive" th:case="3" type="button">确认收货
+                            </button>
+                            <p th:case="4">无</p>
+                        </div>
+                    </div>
+                    <table class="ui striped celled table" id="orders_table">
+                        <thead>
+                        <tr class="center aligned">
+                            <th class="two wide">菜品名</th>
+                            <th class="two wide">所选风味/规格</th>
+                            <th class="one wide">数量</th>
+                            <th class="one wide">单价</th>
+                            <th class="one wide">小计</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="center aligned" th:each="order_dish:${order_dishList.get(orderStat.count-1)}">
+                            <td>
+                                <p th:text="${dishList.get(orderStat.count-1).get(order_dishStat.count-1).getDish_name}"></p>
+                            </td>
+                            <td>
+                                <p th:text="${flavourList.get(orderStat.count-1).get(order_dishStat.count-1).getFlavour_desp}"></p>
+                            </td>
+                            <td>
+                                <p th:text="${order_dish.getDish_number}"></p>
+                            </td>
+                            <td>
+                                <p th:text="${dishList.get(orderStat.count-1).get(order_dishStat.count-1).getPrice}"></p>
+                            </td>
+                            <td>
+                                <p th:text="${dishList.get(orderStat.count-1).get(order_dishStat.count-1).getPrice}*${order_dish.getDish_number}"></p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div th:if="${orderList}==null or ${orderList.size()} <= 0">
+            <div style="display: flex;flex-direction: column;align-items: center;">
+                <img class="ui small image" src="/img/nothing.png" alt="nothing">
+                <h1>什么都没有找到</h1>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

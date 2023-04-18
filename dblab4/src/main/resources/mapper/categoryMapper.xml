@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lab.dblab4.mapper.categoryMapper">
+    <insert id="insert" parameterType="category">
+        insert into category(stall_id, category_name) values (#{stall_id}, #{category_name})
+        <selectKey resultType="int" keyProperty="category_id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <insert id="insertByName" parameterType="String">
+        insert into category(stall_id, category_name) values (#{stall_id}, #{category_name})
+    </insert>
+    <delete id="delete" parameterType="category">
+        delete from category where category_id=#{category_id}
+    </delete>
+    <update id="updateCategoryName" parameterType="category">
+        update category set category_name = #{category_name} where category_id = #{category_id}
+    </update>
+    <select id="findAllByStall" parameterType="stall" resultType="category">
+        select * from category where stall_id = #{stall_id}
+    </select>
+    <select id="findById" parameterType="int" resultType="category">
+        select * from category where category_id = #{category_id}
+    </select>
+</mapper>

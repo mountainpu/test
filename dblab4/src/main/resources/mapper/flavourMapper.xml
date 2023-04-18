@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lab.dblab4.mapper.flavourMapper">
+    <insert id="insert" parameterType="flavour">
+        insert into flavour(dish_id, flavour_desp) values (#{dish_id}, #{flavour_desp})
+        <selectKey resultType="int" keyProperty="flavour_id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <select id="findByDish" parameterType="dish" resultType="flavour">
+        select * from flavour where dish_id = #{dish_id}
+    </select>
+    <select id="find" parameterType="flavour" resultType="flavour">
+        select * from flavour where flavour_id = #{flavour_id}
+    </select>
+    <select id="findByDishId" parameterType="int" resultType="flavour">
+        select * from flavour where dish_id = #{dish_id}
+    </select>
+    <delete id="delete" parameterType="flavour">
+        delete from flavour where flavour_id = #{flavour_id}
+    </delete>
+    <update id="update" parameterType="flavour">
+        update flavour set flavour_desp = #{flavour_desp}, dish_id = #{dish_id} where flavour_id = #{flavour_id}
+    </update>
+</mapper>

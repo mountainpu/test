@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div class="userspace_content" th:fragment="userspace_content">
+    <div class="ui segment" id="userspace_content_title">
+        <h1>我的餐厅</h1>
+        <p class="description">在这里您能查看您所有的餐厅并进行相应的管理</p>
+    </div>
+    <div class="ui three item pointing menu">
+        <div class="header item">我的餐厅</div>
+        <a class="item" target="_blank" th:href="@{/uploadCanteen}"><i class="ui plus icon"></i>新增餐厅</a>
+        <div class="ui category search item">
+            <label>
+                <span class="ui icon input">
+                <input name="search_order" placeholder="搜索..." type="search"><i class="search link icon"></i></span>
+            </label>
+        </div>
+    </div>
+    <div class="ui list">
+        <div class="ui segment">
+            <div class="item" th:each="canteen:${canteenList}" th:id="${canteen.getCanteen_id}">
+                <div class="ui segment">
+                    <h2 style="margin-top: 1em" th:text="'序号：'+${canteenStat.count}"></h2>
+                    <div class="ui horizontal segments" style="margin: 0">
+                        <div class="ui red segment" style="flex-grow: 2">
+                            <p th:text="'餐厅号：'+${canteen.getCanteen_id}">餐厅号</p>
+                        </div>
+                        <div class="ui red segment" style="flex-grow: 2">
+                            <p th:text="'餐厅名：'+${canteen.getCanteen_name}">餐厅名</p>
+                        </div>
+                        <div class="ui red segment" style="flex-grow: 2">
+                            <p th:text="'餐厅地址：'+${addressList.get(canteenStat.count-1).getAddress_name}">餐厅地址</p>
+                        </div>
+                        <div class="ui red segment" style="flex-grow: 2">
+                            <span>操作：</span>
+                            <button class="ui basic primary button updateCanteen" type="button">修改信息</button>
+                            <button class="ui basic red button deleteCanteen" type="button">删除</button>
+                        </div>
+                    </div>
+                    <table class="ui striped celled table" id="orders_table">
+                        <thead>
+                        <tr class="center aligned">
+                            <th class="one wide">商铺号</th>
+                            <th class="two wide">商铺名</th>
+                            <th class="one wide">管理员编号</th>
+                            <th class="three wide">商铺介绍</th>
+                            <th class="one wide">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="center aligned" th:each="stall:${stallList.get(canteenStat.count-1)}">
+                            <td>
+                                <p th:text="${stall.getStall_id}"></p>
+                            </td>
+                            <td>
+                                <p th:text="${stall.getStall_name}"></p>
+                            </td>
+                            <td>
+                                <p th:text="${stall.getUser_id}"></p>
+                            </td>
+                            <td>
+                                <p th:text="${stall.getStall_desp}"></p>
+                            </td>
+                            <td>
+                                <button class="ui basic red button" type="button">删除</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div th:if="${canteenList}==null or ${canteenList.size()} <= 0">
+            <div style="display: flex;flex-direction: column;align-items: center;">
+                <img class="ui small image" src="/img/nothing.png" alt="nothing">
+                <h1>什么都没有找到</h1>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

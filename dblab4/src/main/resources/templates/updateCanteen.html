@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>上传商品</title>
+    <link href="/css/upload.css" rel="stylesheet">
+    <link href="/Semantic-UI-CSS-master/semantic.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="/js/alterCanteen.js"></script>
+</head>
+<script>
+    $(function () {
+        $('.ui.dropdown').dropdown();
+        $('.ui.modal').modal('show');
+        $('.ui.form').form({
+            on:'blur',
+            inline:true,
+            fields:{
+                canteen_name:{
+                    identifier:'canteen_name',
+                    rules:[{
+                        type: 'maxLength[20]',
+                        prompt:'餐厅名最多20个字符',
+                    },{
+                        type: 'empty',
+                        prompt: '餐厅名不能为空',
+                    }]
+                },
+                address_name:{
+                    identifier:'address_name',
+                    rules:[{
+                        type:'maxLength[64]',
+                        prompt:'地址最多64个字符'
+                    }]
+                }
+            }
+        })
+    })
+</script>
+
+<body>
+<div class="<header>" th:replace="~{header::header}"></div>
+<!-- header end -->
+<div class="ui horizontal divider">修改餐厅信息</div>
+
+<div class="ui tiny modal" th:if="${param.accept}">
+    <div class="ui center aligned header">更新信息成功！</div>
+    <div class="content" style="text-align: center">您的更新操作已经完成！</div>
+    <div class="actions">
+        <div class="ui positive button">好的</div>
+    </div>
+</div>
+
+<div class="post_form">
+    <form action="/updatingCanteen" class="ui form" method="post">
+        <div class="required disabled field" id="product_name_field">
+            <label for="canteenName">餐厅名称</label>
+            <input id="canteenName" name="canteen_name" placeholder="请输入餐厅名..." required
+                   th:value="${canteen.getCanteen_name}" type="text">
+        </div>
+        <div class="required disabled field">
+            <label for="address">餐厅地址</label>
+            <input id="address" name="address_name" maxlength="64" placeholder="请输入餐厅地址" required
+                   th:value="${address.getAddress_name}" type="text">
+        </div>
+        <input name="canteen_id" th:value="${canteen.getCanteen_id}" type="hidden">
+        <button class="ui primary button" id="update_canteen_button" style="width: 90%; margin-top: 1em;margin-left:5%"
+                type="button">修改信息
+        </button>
+        <button class="ui primary button" id="update_canteen_confirm_button" style="display:none;width: 90%; margin-top: 1em;margin-left:5%"
+                type="submit">确认修改
+        </button>
+    </form>
+</div>
+<div class="<footer>" th:replace="~{footer::footer}"></div>
+
+</body>
+
+</html>
+

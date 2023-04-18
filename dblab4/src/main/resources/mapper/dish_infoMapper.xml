@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lab.dblab4.mapper.dish_infoMapper">
+    <select id="findAll" resultType="dish_info">
+        select * from dish_info where inventory > 0 order by last_update desc limit 50
+    </select>
+    <select id="findById" parameterType="int" resultType="dish_info">
+        select * from dish_info where dish_id = #{dish_id}
+    </select>
+    <select id="search" parameterType="String" resultType="dish_info">
+        select * from dish_info where match(dish_name) against (#{content} in boolean mode);
+    </select>
+    <select id="findAllByStall" parameterType="stall" resultType="dish_info">
+        select * from dish_info where stall_id = #{stall_id} order by last_update desc limit 50
+    </select>
+</mapper>

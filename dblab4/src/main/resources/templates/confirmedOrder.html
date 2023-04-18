@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>上传商品</title>
+    <link href="/css/upload.css" rel="stylesheet">
+    <link href="/css/purchase.css" rel="stylesheet">
+    <link href="/Semantic-UI-CSS-master/semantic.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+</head>
+<script>
+    $(function () {
+        $('.ui.modal').modal('show')
+        $('.ui.dropdown').dropdown()
+    })
+</script>
+
+<body>
+<div class="<header>" th:replace="~{header::header}"></div>
+<!-- header end -->
+<div class="ui horizontal divider">订单信息</div>
+
+<div class="ui modal" th:if="${param.accept}">
+    <i class="close icon"></i>
+    <div class="ui center aligned header">订单生成成功！</div>
+    <div class="content" style="text-align: center">请耐心等待商家回复！</div>
+    <div class="actions">
+        <div class="ui positive button">好的</div>
+    </div>
+</div>
+<div class="ui segment">
+    <div class="nav">
+        <h1>购买流程-3</h1>
+        <div class="ui ordered steps" id="order_step">
+            <div class="completed step">
+                <div class="content">
+                    <div class="title">选择商品</div>
+                    <div class="description">选择需要购买的商品</div>
+                </div>
+            </div>
+            <div class="completed step">
+                <div class="content">
+                    <div class="title">确认订单</div>
+                    <div class="description">确认购买订单</div>
+                </div>
+            </div>
+            <div class="active step">
+                <div class="content">
+                    <div class="title">等待商铺处理</div>
+                    <div class="description">等待商铺确认订单、发货和配送</div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="content">
+                    <div class="title">客户确认收货</div>
+                    <div class="description">客户收货后点击收货按钮</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui success message">
+        <div class="header">恭喜您购买成功，请耐心等待商家回复</div>
+        <p class="description">
+            您已经完成了购买操作，请等待商家确认订单和发货。
+        </p>
+        <p class="description">
+            订单详细信息请在<a href="/home">个人中心</a>中查看
+        </p>
+        <button class="ui positive button" onclick="window.location.href='/index'" type="button">好的</button>
+    </div>
+</div>
+<!-- footer start -->
+
+</body>
+
+</html>
+

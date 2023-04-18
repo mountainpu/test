@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>登录</title>
+    <link href="/Semantic-UI-CSS-master/semantic.min.css" rel="stylesheet">
+    <link href="/css/login.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+</head>
+<script>
+    $(function () {
+        $('.modal').modal({
+            onApprove: function () {
+                window.location.href = '/index'
+            }
+        }).modal('show');
+    })
+</script>
+<body>
+<!-- header start -->
+<div class="<header>" th:replace="~{header::header}"></div>
+<!-- header end -->
+
+<div class="ui modal" id="fail_modal" th:if="${param.error}">
+    <div class="ui center aligned header">登陆失败</div>
+    <div class="content" style="text-align: center">您的账户或密码出现错误，请检查后重试！</div>
+    <div class="actions">
+        <div class="ui negative button">好的</div>
+    </div>
+</div>
+<div class="ui modal" id="accept_modal" th:if="${param.accept}">
+    <div class="ui center aligned header">登陆成功</div>
+    <div class="content" style="text-align: center">您已登录成功！</div>
+    <div class="actions">
+        <div class="ui positive button">好的</div>
+    </div>
+</div>
+<div class="main">
+    <div class="ui horizontal divider">登录</div>
+    <div class="login-form">
+        <form class="ui form" method="post" th:action="@{/logging}">
+            <div class="field">
+                <label for="username">用户名</label>
+                <input autofocus class="ui input" id="username" name="username" required type="text">
+            </div>
+            <div class="filed">
+                <label for="password">密码</label>
+                <input class="ui input" id="password" name="password" required type="password">
+            </div>
+            <button class="ui primary button" style="width: 90%; margin-top: 1em;margin-left:5%" type="submit">登录
+            </button>
+            <div class="ui success message"></div>
+        </form>
+        <div class="form_addition">
+            <a href="/register">注册</a>
+            &emsp;&emsp;
+            <a>忘记密码</a>
+        </div>
+    </div>
+</div>
+<div class="<footer>" th:replace="~{footer::footer}"></div>
+
+<!-- footer end -->
+</body>
+
+</html>

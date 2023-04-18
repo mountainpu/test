@@ -1,0 +1,20 @@
+.index_search{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    margin-top: 5%;
+}
+.index_search form{
+    width: 50%;
+}
+#index_segment{
+    margin-top: 5%;
+}
+#index_segment h1{
+    margin-left: 12.5%;
+}
+#index_table{
+    width: 75%;
+    margin: 3% auto auto auto;
+}

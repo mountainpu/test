@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>建立餐厅</title>
+    <link href="/css/upload.css" rel="stylesheet">
+    <link href="/Semantic-UI-CSS-master/semantic.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+
+</head>
+<script>
+    $(function () {
+        $('.ui.modal').modal('show')
+        $('.ui.dropdown').dropdown()
+        $('.ui.form').form({
+            on:'blur',
+            inline:true,
+            fields:{
+                canteen_name:{
+                    identifier:'canteen_name',
+                    rules:[{
+                        type: 'maxLength[20]',
+                        prompt:'餐厅名最多20个字符',
+                    },{
+                        type: 'empty',
+                        prompt: '餐厅名不能为空',
+                    }]
+                },
+                address_name:{
+                    identifier:'address_name',
+                    rules:[{
+                        type:'maxLength[64]',
+                        prompt:'地址最多64个字符'
+                    }]
+                }
+            }
+        })
+    })
+</script>
+
+<body>
+<div class="<header>" th:replace="~{header::header}"></div>
+<!-- header end -->
+<div class="ui horizontal divider">建立新餐厅</div>
+
+<div class="ui modal" id="success_modal" th:if="${param.accept}">
+    <i class="close icon"></i>
+    <div class="ui center aligned header">建立成功</div>
+    <div class="content" style="text-align: center">您已经成功建立了一个新餐厅！</div>
+    <div class="actions">
+        <div class="ui positive button">好的</div>
+    </div>
+</div>
+
+<div class="post_form">
+    <form action="/uploadingCanteen" class="ui form" method="post">
+        <div class="required field" id="product_name_field">
+            <label for="canteenName">餐厅名称</label>
+            <input id="canteenName" name="canteen_name" placeholder="请输入餐厅名..." required type="text">
+        </div>
+        <div class="required field">
+            <label for="address">餐厅地址</label>
+            <input id="address" name="address_name" placeholder="请输入餐厅地址" required type="text">
+        </div>
+        <button class="ui primary button" type="submit">提交</button>
+    </form>
+</div>
+<!--
+-->
+<!-- footer start -->
+<div class="<footer>" th:replace="~{footer::footer}"></div>
+
+</body>
+
+</html>
+

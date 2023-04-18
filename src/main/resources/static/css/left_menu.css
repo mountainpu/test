@@ -1,0 +1,22 @@
+.left_menu .divided.item{
+    height: 7%;
+    font-size: large;
+    font-family:"微软雅黑 Light", serif;
+}
+.left_menu{
+    position: fixed;
+    z-index: 1;
+    background-color: black;
+    height: 100%;
+    width: 15%;
+}
+.left_menu .menu{
+    height: 100%;
+    width: 100% !important;
+}
+.left_menu .image{
+    margin: auto;
+}
+.left_menu p{
+    text-align: center;
+}

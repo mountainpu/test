@@ -1,0 +1,10 @@
+.register-form {
+    width: 33%;
+    margin: auto;
+    padding:10px 10px 35px 10px;
+    border: 1px solid silver;
+}
+.form_addition{
+     float: right;
+     margin-top: 10px
+ }

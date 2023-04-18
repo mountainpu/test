@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>更新菜品信息</title>
+    <link href="/css/upload.css" rel="stylesheet">
+    <link href="/Semantic-UI-CSS-master/semantic.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="/js/alterDish.js"></script>
+</head>
+<script>
+    $(function () {
+        $('.ui.dropdown')
+            .dropdown({
+                allowAdditions: true
+            });
+        $('.ui.modal').modal('show')
+        $('.ui.form').form({
+            on:'blur',
+            inline:true,
+            fields:{
+                dish_name:{
+                    identifier:'dish_name',
+                    rules:[{
+                        type: 'maxLength[50]',
+                        prompt:'菜品名最多50个字符',
+                    },{
+                        type: 'empty',
+                        prompt: '菜品名不能为空',
+                    }]
+                },
+                dish_desp:{
+                    identifier: 'dish_desp',
+                    rules:[{
+                        type: 'maxLength[50]',
+                        prompt:'菜品描述最多128个字符',
+                    },{
+                        type: 'empty',
+                        prompt: '菜品描述不能为空',
+                    }]
+                },
+                inventory:{
+                    identifier: 'inventory',
+                    rules:[{
+                        type: 'regExp[/[1-9][0-9]+/]',
+                        prompt:'数量不符合正整数要求',
+                    }]
+                },
+                price:{
+                    identifier:'price',
+                    rules:[{
+                        type:'regExp[/^\d+(\.\d+)?$/]',
+                        prompt:'价格不符合正浮点数要求'
+                    }]
+                }
+            }
+        })
+    })
+</script>
+
+<body>
+<div class="<header>" th:replace="~{header::header}"></div>
+<!-- header end -->
+<div class="ui horizontal divider">更新菜品信息</div>
+
+<div class="ui tiny modal" th:if="${param.accept}">
+    <div class="ui center aligned header">更新信息成功！</div>
+    <div class="content" style="text-align: center">您的更新操作已经完成！</div>
+    <div class="actions">
+        <div class="ui positive button">好的</div>
+    </div>
+</div>
+
+<div class="post_form">
+    <form action="/updatingDish" class="ui form" method="post">
+        <input hidden name="dish_id" th:value="${dish.getDish_id}">
+        <div class="required disabled field">
+            <label for="dish_name">菜品名称</label>
+            <input id="dish_name" name="dish_name" placeholder="请输入标题" required th:value="${dish.getDish_name}"
+                   type="text">
+        </div>
+
+        <div class="two fields">
+            <div class="required disabled field">
+                <label for="inventory">菜品数量</label>
+                <input id="inventory" min="1" name="inventory" placeholder="请输入库存数量" required
+                       th:value="${dish.getInventory}" type="number">
+            </div>
+            <div class="required disabled field">
+                <label for="price">菜品价格</label>
+                <input id="price" name="price" placeholder="请输入单品价格" required th:value="${dish.getPrice}" type="number">
+            </div>
+        </div>
+
+        <div class="required disabled field">
+            <label for="category">请选择或新增菜品类别</label>
+            <select class="ui fluid search dropdown" id="category" name="category_id" required>
+                <option value="">输入完成后按回车即可</option>
+                <option th:each="category:${categoryList}"
+                        th:selected="${category.getCategory_id() eq dish.getCategory_id}" th:text="${category.getCategory_name()}"
+                        th:value="${category.getCategory_id()}"></option>
+            </select>
+        </div>
+        <div class="required disabled field">
+            <label for="flavour">请新增或修改菜品风味</label>
+            <select class="ui fluid search dropdown" id="flavour" multiple="" name="flavour" required>
+                <option value="">输入完成后按回车即可</option>
+                <option selected th:each="flavour:${flavourList}" th:text="${flavour.getFlavour_desp}"
+                        th:value="${flavour.getFlavour_id}"></option>
+            </select>
+        </div>
+        <div class="disabled field">
+            <label for="dish_desp">菜品的简单介绍：</label>
+            <textarea id="dish_desp" name="dish_desp" placeholder="简单描述菜品：" rows="7"
+                      th:text="${dish.getDish_desp}"></textarea>
+        </div>
+        <button class="ui primary button" id="update_dish_button" style="width: 90%; margin-top: 1em;margin-left:5%"
+                type="button">修改信息
+        </button>
+        <button class="ui primary button" id="update_dish_confirm_button" style="display:none;width: 90%; margin-top: 1em;margin-left:5%"
+                type="button">确认修改
+        </button>
+    </form>
+</div>
+
+<!-- footer start -->
+<div class="<footer>" th:replace="~{footer::footer}"></div>
+
+</body>
+
+</html>
+

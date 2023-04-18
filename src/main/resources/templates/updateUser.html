@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>注册</title>
+    <link href="/Semantic-UI-CSS-master/semantic.min.css" rel="stylesheet">
+    <link href="/css/register.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="/js/updateUser.js"></script>
+
+</head>
+<script>
+    $(function () {
+        $('.modal').modal('show');
+        $('.ui.dropdown').dropdown();
+        let old_username = $('#username').val()
+        $.fn.form.settings.rules.checkUsername = function (value) {
+            let new_username = $('#username').val()
+            if (old_username === new_username) return true
+            let res
+            $.ajax("checkUsername?username="+new_username, {
+                type:'GET',
+                contentType:false,
+                processData:false,
+                async:false,
+                success:function (response){
+                    res = response;
+                }
+            })
+            return res
+        }
+        $('.ui.form').form({
+            on:'blur',
+            inline:true,
+            fields:{
+                username:{
+                    identifier:'username',
+                    rules:[{
+                        type: 'maxLength[20]',
+                        prompt:'用户名最多20个字符',
+                    },{
+                        type: 'empty',
+                        prompt: '用户名不能为空',
+                    },{
+                        type: 'checkUsername[]',
+                        prompt: '该用户名已经被注册了'
+                    }]
+                },
+                password:{
+                    identifier: 'password',
+                    rules: [{
+                        type:'maxLength[30]',
+                        prompt:'密码最多30个字符',
+                    },{
+                        type: 'empty',
+                        prompt: '密码不能为空'
+                    }]
+                },
+                cellphone:{
+                    identifier:'cellphone',
+                    rules:[{
+                        type:'regExp[/[0-9]{11}/]',
+                        prompt:'手机号格式错误！'
+                    }]
+                }
+            }
+        })
+    })
+</script>
+<body>
+<!-- header start -->
+<div class="<header>" th:replace="~{header::header}"></div>
+<!-- header end -->
+
+<div class="ui tiny modal" th:if="${param.accept}">
+    <div class="ui center aligned header">更新信息成功！</div>
+    <div class="content" style="text-align: center">您的更新操作已经完成！</div>
+    <div class="actions">
+        <div class="ui positive button">好的</div>
+    </div>
+</div>
+<div class="main">
+    <div class="ui horizontal divider">用户信息</div>
+    <div class="register-form">
+        <form class="ui form" method="post" th:action="@{/updatingUser}">
+            <div class="form-fields">
+                <div class="required disabled field" id="username_filed">
+                    <label for="username">用户名</label>
+                    <input class="ui input" id="username" name="username" required th:value="${userinfo.username}"
+                           type="text"><span></span>
+                </div>
+                <div class="required disabled field">
+                    <label for="password">密码</label>
+                    <input autocomplete="new-password" class="ui input" id="password" name="password" required
+                           type="password" th:value="${userinfo.password}">
+                </div>
+                <div class="required disabled field">
+                    <label for="cellphone">手机号码</label>
+                    <input class="ui input" id="cellphone" name="cellphone" required th:value="${userinfo.cellphone}"
+                           type="text">
+                </div>
+                <div class="address required disabled field" th:each="address:${addressList}"
+                     th:id="${addressStat.count}">
+                    <span>
+                        <label th:for="'address'+${addressStat.count}" th:text="'地址信息'+${addressStat.count}"></label>
+                        <i class='ui red close link icon' th:id="'icon'+${addressStat.count}"></i>
+                    </span>
+                    <input name="address_name" placeholder="请输入新的地址" required
+                           th:id="'address'+${addressStat.count}" th:value="${address.getAddress_name()}" maxlength="64" type="text">
+                </div>
+            </div>
+            <button class="ui primary button" id="add_address_button" style="display:none;width: 90%; margin-top: 1em;margin-left:5%"
+                    type="button">增加新地址
+            </button>
+            <button class="ui primary button" id="update_user_button" style="width: 90%; margin-top: 1em;margin-left:5%"
+                    type="button">修改信息
+            </button>
+            <button class="ui primary button" id="update_user_confirm_button" style="display:none;width: 90%; margin-top: 1em;margin-left:5%"
+                    type="submit">确认修改
+            </button>
+        </form>
+
+    </div>
+</div>
+</body>
+
+</html>

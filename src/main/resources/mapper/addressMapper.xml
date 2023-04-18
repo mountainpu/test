@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lab.dblab4.mapper.addressMapper">
+    <select id="findById" parameterType="int" resultType="address">
+        select * from address where address_id = #{address_id}
+    </select>
+    <select id="findByAddress" parameterType="String" resultType="address">
+        select * from address where address_name = #{address_name}
+    </select>
+    <select id="find" parameterType="address" resultType="address">
+        select * from address where address_id = #{address_id}
+    </select>
+    <insert id="insert" parameterType="address" useGeneratedKeys="true">
+        insert into address(address_name) values (#{address_name})
+        <selectKey resultType="int" keyProperty="address_id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <insert id="insertByName" parameterType="String">
+        insert into address(address_name) values (#{address_name})
+    </insert>
+    <update id="update" parameterType="address">
+        update address
+        set address_name = #{address_name}
+        where address_id = #{address_id}
+    </update>
+    <delete id="delete" parameterType="address">
+        delete from address where address_id = #{address_name}
+    </delete>
+
+</mapper>

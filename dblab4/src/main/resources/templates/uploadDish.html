@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>上传菜品</title>
+    <link href="/css/upload.css" rel="stylesheet">
+    <link href="/Semantic-UI-CSS-master/semantic.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="/js/alterDish.js"></script>
+</head>
+<script>
+    $(function () {
+        $('.ui.dropdown')
+            .dropdown({allowAdditions: true})
+        $('.ui.modal').modal('show')
+        $('.ui.form').form({
+            on:'blur',
+            inline:true,
+            fields:{
+                dish_name:{
+                    identifier:'dish_name',
+                    rules:[{
+                        type: 'maxLength[50]',
+                        prompt:'菜品名最多50个字符',
+                    },{
+                        type: 'empty',
+                        prompt: '菜品名不能为空',
+                    }]
+                },
+                dish_desp:{
+                    identifier: 'dish_desp',
+                    rules:[{
+                        type: 'maxLength[50]',
+                        prompt:'菜品描述最多128个字符',
+                    },{
+                        type: 'empty',
+                        prompt: '菜品描述不能为空',
+                    }]
+                },
+                inventory:{
+                    identifier: 'inventory',
+                    rules:[{
+                        type: 'regExp[/[1-9][0-9]*/]',
+                        prompt:'数量不符合正整数要求',
+                    }]
+                },
+                price:{
+                    identifier:'price',
+                    rules:[{
+                        type:'regExp[/^[0-9]+(.[0-9]+)?$/]',
+                        prompt:'价格不符合正浮点数要求'
+                    }]
+                }
+            }
+        })
+    })
+</script>
+
+<body>
+<div class="<header>" th:replace="~{header::header}"></div>
+<!-- header end -->
+<div class="ui horizontal divider">发布新的菜品</div>
+
+<div class="ui modal" id="success_modal" th:if="${param.accept}">
+    <i class="close icon"></i>
+    <div class="ui center aligned header">发布成功</div>
+    <div class="content" style="text-align: center">您的菜品已经发布成功，快来看看吧</div>
+    <div class="actions">
+        <div class="ui positive button" onclick="window.location.href='/index'">去看看</div>
+    </div>
+</div>
+
+<div class="post_form">
+    <form action="/uploadingDish" class="ui form" method="post">
+        <div class="required field">
+            <label for="dish_name">菜品名称</label>
+            <input id="dish_name" name="dish_name" placeholder="请输入标题" required type="text">
+        </div>
+
+        <div class="two fields">
+            <div class="required field">
+                <label for="inventory">菜品数量</label>
+                <input id="inventory" min="1" name="inventory" placeholder="请输入库存数量" required type="number">
+            </div>
+            <div class="required field">
+                <label for="price">菜品价格</label>
+                <input id="price" name="price" placeholder="请输入单品价格" required type="number">
+            </div>
+        </div>
+
+        <div class="required field">
+            <label for="category">请选择或新增菜品类别</label>
+            <select class="ui fluid search dropdown" id="category" name="category_id" required>
+                <option value="">输入完成后按回车即可</option>
+                <option th:each="category:${categoryList}" th:text="${category.getCategory_name()}"
+                        th:value="${category.getCategory_id()}"></option>
+            </select>
+        </div>
+        <div class="required field">
+            <label for="flavour">请新增菜品风味</label>
+            <select class="ui fluid search dropdown" id="flavour" multiple="" name="flavour" required>
+                <option value="">输入完成后按回车即可</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="dish_desp">菜品的简单介绍：</label>
+            <textarea id="dish_desp" name="dish_desp" placeholder="简单描述菜品：" rows="7"></textarea>
+        </div>
+        <button class="ui primary button" id="upload_dish_confirm_button" type="button">提交</button>
+    </form>
+</div>
+
+<!-- footer start -->
+<div class="<footer>" th:replace="~{footer::footer}"></div>
+
+</body>
+
+</html>
+

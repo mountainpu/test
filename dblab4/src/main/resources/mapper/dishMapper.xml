@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lab.dblab4.mapper.dishMapper">
+    <insert id="insert" parameterType="dish">
+        insert into dish(category_id, dish_name, price, dish_desp, inventory)
+        values (#{category_id}, #{dish_name}, #{price}, #{dish_desp}, #{inventory})
+        <selectKey resultType="int" keyProperty="dish_id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <update id="update" parameterType="dish">
+        update dish set category_id = #{category_id}, dish_name = #{dish_name},
+                        price = #{price}, dish_desp = #{dish_desp}, inventory = #{inventory}
+                    where dish_id = #{dish_id}
+    </update>
+    <delete id="delete" parameterType="dish">
+        delete from dish where dish_id = #{dish_id}
+    </delete>
+    <select id="find" parameterType="dish">
+        select * from dish where dish_id = #{dish_id}
+    </select>
+    <select id="findById" parameterType="int" resultType="dish">
+        select * from dish where dish_id = #{dish_id}
+    </select>
+    <select id="findAll" resultType="dish">
+        select * from dish order by last_update desc limit 50
+    </select>
+    <update id="updateInventory">
+        update dish set inventory = #{inventory} where dish_id = #{dish_id}
+    </update>
+</mapper>

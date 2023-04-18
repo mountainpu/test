@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>上传商品</title>
+    <link href="/css/upload.css" rel="stylesheet">
+    <link href="/Semantic-UI-CSS-master/semantic.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <script src="/js/alterStall.js"></script>
+
+</head>
+<script>
+    $(function () {
+        $('.ui.modal').modal('show');
+        $('.ui.dropdown').dropdown();
+        $('.ui.form').form({
+            on:'blur',
+            inline:true,
+            fields:{
+                stall_name:{
+                    identifier:'stall_name',
+                    rules:[{
+                        type: 'maxLength[50]',
+                        prompt:'商铺名最多50个字符',
+                    },{
+                        type: 'empty',
+                        prompt: '商铺名不能为空',
+                    }]
+                },
+                stall_desp:{
+                    identifier: 'stall_desp',
+                    rules:[{
+                        type: 'maxLength[128]',
+                        prompt:'商铺描述最多128个字符',
+                    },{
+                        type: 'empty',
+                        prompt: '商铺描述不能为空',
+                    }]
+                }
+            }
+        })
+    })
+</script>
+
+<body>
+<div class="<header>" th:replace="~{header::header}"></div>
+<!-- header end -->
+<div class="ui horizontal divider">商铺信息</div>
+
+<div class="ui tiny modal" th:if="${param.accept}">
+    <div class="ui center aligned header">更新信息成功！</div>
+    <div class="content" style="text-align: center">您的更新操作已经完成！</div>
+    <div class="actions">
+        <div class="ui positive button">好的</div>
+    </div>
+</div>
+
+<div class="post_form">
+    <form action="/updatingStall" class="ui form" method="post">
+        <input name="stall_id" th:value="${stall.stall_id}" type="hidden">
+        <div class="required disabled field" id="product_name_field">
+            <label for="stallName">商铺名称</label>
+            <input id="stallName" name="stall_name" placeholder="请输入商铺名称" required th:value="${stall.stall_name}"
+                   type="text">
+        </div>
+        <div class="required fluid disabled field">
+            <label for="stall_desp">商铺描述</label>
+            <textarea id="stall_desp" name="stall_desp" placeholder="简单描述您的商铺：" rows="7"
+                      th:text="${stall.stall_desp}"></textarea>
+        </div>
+        <div class="required disabled field">
+            <label for="select_canteen">所属餐厅</label>
+            <select class="ui dropdown" id="select_canteen" name="canteen_id" required th:text="${stall.canteen_id}">
+                <option value="">选择餐厅</option>
+            </select>
+        </div>
+        <button class="ui primary button" id="alter_button" style="width: 90%; margin-top: 1em;margin-left:5%"
+                type="button">修改信息
+        </button>
+        <button class="ui primary button" id="confirm_button" style="display:none;width: 90%; margin-top: 1em;margin-left:5%"
+                type="submit">确认修改
+        </button>
+    </form>
+</div>
+<!--
+-->
+<!-- footer start -->
+<div class="<footer>" th:replace="~{footer::footer}"></div>
+
+</body>
+
+</html>
+

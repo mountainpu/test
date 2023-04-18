@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>上传商品</title>
+    <link href="/css/upload.css" rel="stylesheet">
+    <link href="/css/purchase.css" rel="stylesheet">
+    <link href="/Semantic-UI-CSS-master/semantic.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+</head>
+<script>
+    $(function () {
+        $('.ui.modal').modal('show')
+        $('.ui.dropdown').dropdown()
+    })
+</script>
+
+<body>
+<div class="<header>" th:replace="~{header::header}"></div>
+<!-- header end -->
+<div class="ui horizontal divider">订单信息</div>
+
+<div class="ui modal" th:if="${param.accept}">
+    <i class="close icon"></i>
+    <div class="ui center aligned header">订单生成成功！</div>
+    <div class="content" style="text-align: center">请耐心等待商家回复！</div>
+    <div class="actions">
+        <div class="ui positive button">好的</div>
+    </div>
+</div>
+
+<div class="nav">
+    <h1>购买流程-2</h1>
+    <div class="ui ordered steps" id="order_step">
+        <div class="completed step">
+            <div class="content">
+                <div class="title">选择商品</div>
+                <div class="description">选择需要购买的商品</div>
+            </div>
+        </div>
+        <div class="active step">
+            <div class="content">
+                <div class="title">确认订单</div>
+                <div class="description">确认购买订单</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">等待商铺处理</div>
+                <div class="description">等待商铺确认订单、发货和配送</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">客户确认收货</div>
+                <div class="description">客户收货后点击收货按钮</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="post_form">
+
+    <div class="ui relaxed list">
+        <div class="item">
+            <div class="ui segment">
+                <h1 class="header" th:text="${dish.getDish_name}">菜品名称</h1>
+                <div class="description" style="margin-bottom: 1em" th:text="${dish.getDish_desp}">菜品描述</div>
+                <p th:text="'商铺：'+${stall.getStall_name}">商铺:</p>
+                <p th:text="'食堂：'+${canteen.getCanteen_name}">食堂:</p>
+            </div>
+        </div>
+        <div class="item">
+            <div class="ui segment">
+                <h3>简要信息：</h3>
+                <p th:text="'分类：'+${category.getCategory_name}">分类:</p>
+                <p th:text="'单价：'+${dish.getPrice}">单价:</p>
+                <p th:text="'数量：'+${order_dish.getDish_number}">数量:</p>
+                <p th:text="'风味：'+${flavour.getFlavour_desp}">风味:</p>
+                <p th:text="'小计：'+${dish.getPrice*order_dish.getDish_number}"></p>
+            </div>
+        </div>
+    </div>
+    <div class="item">
+        <div class="ui segment">
+            <form action="/confirmingOrder" class="ui form">
+                <div class="field">
+                    <label for="order_address">选择地址：</label>
+                    <select class="ui dropdown" id="order_address" name="address_id" required>
+                        <option value="">选择收获地址</option>
+                        <option th:each="address:${addressList}" th:text="${address.getAddress_name}"
+                                th:value="${address.getAddress_id}"></option>
+                    </select>
+                    <a href="/userinfo" style="float:right" th:if="${addressList.size()} == 0">没有设置地址？点此设置！</a>
+                </div>
+                <input name="stall_id" th:value="${stall.getStall_id}" type="hidden">
+                <input name="order_price" th:value="${dish.getPrice}*${order_dish.getDish_number}" type="hidden">
+                <input name="flavour_id" th:value="${flavour.getFlavour_id}" type="hidden">
+                <input name="dish_id" th:value="${dish.getDish_id}" type="hidden">
+                <input name="dish_number" th:value="${order_dish.getDish_number}" type="hidden">
+                <button class="ui primary button" type="submit">确认订单</button>
+                <button class="ui red button" onclick="window.history.back()" type="button">取消</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- footer start -->
+<div class="ui horizontal divider"><i class="caret down icon"></i></div>
+</body>
+
+</html>
+

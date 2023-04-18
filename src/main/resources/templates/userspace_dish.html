@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div class="userspace_content" th:fragment="userspace_content">
+    <div class="ui segment" id="userspace_content_title">
+        <h1>我的菜品</h1>
+        <p class="description">在这里您能查看您所有的菜品信息</p>
+    </div>
+    <div class="ui four item pointing menu">
+        <div class="header item">我的菜品</div>
+        <a class="item" th:href="@{/myDish}">所有菜品</a>
+        <a class="item" target="_blank" th:href="@{/uploadDish}"><i class="ui plus icon"></i>新增菜品</a>
+        <div class="ui category search item">
+            <label>
+                <span class="ui icon input">
+                    <input name="search_order" placeholder="搜索..." type="search"><i class="search link icon"></i></span>
+            </label>
+        </div>
+    </div>
+    <table class="ui striped celled table" id="orders_table">
+        <thead>
+        <tr class="center aligned">
+            <th class="one wide">序号</th>
+            <th class="two wide">菜品名</th>
+            <th class="one wide">菜品分类</th>
+            <th class="one wide">菜品风味</th>
+            <th class="one wide">单价</th>
+            <th class="one wide">库存</th>
+            <th class="two wide">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="center aligned" th:each="dish:${dishList}" th:id="${dish.getDish_id}">
+            <td>
+                <p th:text="${dishStat.count}"></p>
+            </td>
+            <td>
+                <div class="content">
+                    <h4 th:text="${dish.getDish_name()}">此处为标题</h4>
+                    <p class="description" th:text="${dish.getDish_desp()}">此处为描述</p>
+                </div>
+            </td>
+            <td>
+                <p th:text="${dish.getCategory_name}"></p>
+            </td>
+            <td>
+                <p th:each="flavour:${dish.getFlavours}" th:text="${flavour.getFlavour_desp}"></p>
+            </td>
+            <td>
+                <p th:text="${dish.getPrice()}"></p>
+            </td>
+            <td>
+                <p th:text="${dish.getInventory}"></p>
+            </td>
+            <td>
+                <div>
+                    <button class="ui basic primary button updateDish" type="button">修改信息</button>
+                </div>
+                <div>
+                    <button class="ui basic red button deleteDish" type="button">删除菜品</button>
+                </div>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+    <div th:if="${dishList}==null or ${dishList.size()} <= 0">
+        <div style="display: flex;flex-direction: column;align-items: center;">
+            <img class="ui small image" src="/img/nothing.png" alt="nothing">
+            <h1>什么都没有找到</h1>
+        </div>
+    </div>
+</div>
+</html>

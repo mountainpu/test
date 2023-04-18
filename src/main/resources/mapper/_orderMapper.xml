@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lab.dblab4.mapper._orderMapper">
+    <update id="updateAcceptTime" parameterType="int">
+        update _order set order_status = 2 where order_id = #{order_id}
+    </update>
+    <update id="updateSendTime" parameterType="int">
+        update _order set order_status = 3 where order_id = #{order_id}
+    </update>
+    <update id="updateArriveTime" parameterType="int">
+        update _order set order_status = 4 where order_id = #{order_id}
+    </update>
+    <insert id="insert" parameterType="_order">
+        insert into _order (user_id, stall_id, address_id, order_create_time, order_price, order_status)
+        values (#{user_id}, #{stall_id}, #{address_id}, now(), #{order_price}, #{order_status});
+        <selectKey resultType="int" keyProperty="order_id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <select id="findAllByUser" parameterType="user" resultType="_order">
+        select * from _order where user_id = #{user_id} order by last_update desc limit 50
+    </select>
+    <select id="findAllByStall" parameterType="stall" resultType="_order">
+        select * from _order where stall_id = #{stall_id} order by last_update desc limit 50
+    </select>
+    <select id="findById" parameterType="int" resultType="_order">
+        select * from _order where order_id = #{order_id}
+    </select>
+    <select id="find" parameterType="_order" resultType="_order">
+        select * from _order where order_id = #{order_id}
+    </select>
+    <select id="findAllByUserIdStatus" resultType="_order">
+        select * from _order where user_id=#{user_id} and order_status = #{status}
+    </select>
+    <select id="findAllByStallStatus" resultType="_order">
+        select * from _order where stall_id=#{stall_id} and order_status = #{status}
+    </select>
+</mapper>

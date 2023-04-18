@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>首页</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <link href="/Semantic-UI-CSS-master/semantic.css" rel="stylesheet">
+    <link href="/css/index.css" rel="stylesheet">
+</head>
+<script>
+    $(function () {
+        $('.modal').modal('show');
+        $('.purchase.button').click(function () {
+            let id = $(this).parents('tr').get(0).getAttribute('id')
+            window.location.href = "/dishInfo/" + id
+        })
+    })
+</script>
+<body>
+<!-- 通过模板引擎代替<header> -->
+<div class="<header>" th:replace="~{header::header}"></div>
+<!-- header end -->
+
+<!-- body start -->
+<div class="ui modal" th:if="(${param.logout}) and (${param.logout.get(0).toString()} == '1')">
+    <div class="ui center aligned header">注销成功</div>
+    <div class="content" style="text-align: center">您已成功注销！</div>
+    <div class="actions">
+        <div class="ui positive button">好的</div>
+    </div>
+</div>
+<div class="ui modal" th:if="(${param.logout}) and (${param.logout.get(0).toString()} == '0')">
+    <div class="ui center aligned header">注销失败</div>
+    <div class="content" style="text-align: center">您还未登录！</div>
+    <div class="actions">
+        <div class="ui negative button">好的</div>
+    </div>
+</div>
+<div class="index_search">
+    <img alt="logo" class="ui medium image" src="/img/logo.png">
+    <form th:action="@{/searching}">
+        <label class="ui large fluid action input">
+            <input name="content" placeholder="看看有啥好吃的？" type="search">
+            <button class="ui icon button" type="submit"><i class="search icon"></i></button>
+        </label>
+    </form>
+</div>
+
+<div id="index_segment">
+    <h1>最新菜品</h1>
+</div>
+
+<table class="ui red selectable striped celled table" id="index_table">
+    <thead>
+    <tr class="center aligned">
+        <th class="one wide">序号</th>
+        <th class="three wide">菜品</th>
+        <th class="one wide">价格</th>
+        <th class="one wide">存货</th>
+        <th class="two wide">分类</th>
+        <th class="one wide">商铺</th>
+        <th class="one wide">所在食堂</th>
+        <th class="two wide">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="center aligned" th:each="dish:${dishList}" th:id="${dish.getDish_id}">
+        <td>
+            <p th:text="${dishStat.count}"></p>
+        </td>
+        <td class="order_dish_info">
+            <div class="content">
+                <h4 th:text="${dish.getDish_name()}">此处为商品标题</h4>
+                <p class="userspace description" th:text="${dish.getDish_desp()}">此处为商品描述</p>
+            </div>
+        </td>
+        <td>
+            <p th:text="${dish.getPrice()}"></p>
+        </td>
+        <td>
+            <p th:text="${dish.getInventory}"></p>
+        </td>
+        <td>
+            <p th:text="${dish.getCategory_name}"></p>
+        </td>
+        <td>
+            <p th:text="${dish.getStall_name}"></p>
+        </td>
+        <td>
+            <p th:text="${dish.getCanteen_name}"></p>
+        </td>
+        <td>
+            <button th:if="${dish.getInventory} > 0" class="ui basic primary button purchase">点击购买</button>
+            <p th:if="${dish.getInventory} <= 0">暂时缺货</p>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<!-- body end -->
+
+<!-- footer start -->
+<!--<div class="<footer>" th:replace="~{footer::footer}"></div>-->
+<!-- footer end -->
+
+</body>
+
+</html>

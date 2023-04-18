@@ -1,0 +1,44 @@
+.description{
+    text-align: center;
+    color: #999999;
+}
+.userspace_content{
+    width: 85%;
+    margin-left: 15%;
+}
+#userspace_content_title h1{
+    text-align: center;
+    font-family: "微软雅黑 Light", serif;
+}
+#userspace_content_title p{
+    text-align: center;
+    font-family: "微软雅黑 Light", serif;
+}
+.order_product_info_img{
+     width: 100px;
+     max-height: 100px;
+     padding: 5px;
+     border: 1px solid silver;
+     margin: 10px;
+ }
+.order_product_info{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.userspace.description{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 20px;
+    overflow: hidden;
+    width: 15em;
+}
+.deleteDish.button{
+    margin-top: 1em;
+}
+.red.segment{
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+}

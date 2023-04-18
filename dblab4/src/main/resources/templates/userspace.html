@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>我的订单</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+    <link href="/Semantic-UI-CSS-master/semantic.min.css" rel="stylesheet">
+    <link href="/css/userspace.css" rel="stylesheet">
+</head>
+<script>
+    $(function () {
+        let delete_modal = "<div class='ui modal' id='delete_modal'>" +
+            "<i class='close icon'></i>" +
+            "<div class='ui center aligned header'>需确认</div>" +
+            "<div class='content' style='text-align: center'>您确定要删除吗？</div>" +
+            "<div class='actions'>" +
+            "<div class='ui positive button'>确认</div>" +
+            "<div class='ui negative button'>取消</div>" +
+            "</div>" +
+            "</div>"
+        $('#noStall').modal({
+            onApprove: function () {
+                window.location.href = '/uploadStall'
+            }
+        })
+        $('.modal').modal('show');
+        $('.deleteDish').click(function () {
+            if (document.getElementById('delete_modal') == null) {
+                let b = $('body')
+                b.append(delete_modal)
+            }
+            let id = $(this).parents('tr').get(0).getAttribute('id')
+            $('#delete_modal').modal({
+                onApprove: function () {
+                    $.ajax("/deleteDish/"+id, {
+                        type:'GET',
+                        contentType:false,
+                        processData:false,
+                        success:function (response){
+                            if (response){
+                                alert("操作成功！")
+                            }
+                            else alert("操作失败！")
+                        },
+                        error:function (){
+                            alert("操作失败！")
+                        }
+                    })
+                }
+            }).modal('show')
+        })
+        $('.updateDish').click(function () {
+            let id = $(this).parents('tr').get(0).getAttribute('id')
+            window.location.href = "/updateDish/" + id
+        })
+        $('.updateCanteen').click(function () {
+            let id = $(this).parents('.item').get(0).getAttribute('id')
+            window.location.href = "/updateCanteen/" + id
+        })
+        $('.acceptOrder').click(function () {
+            let id = $(this).parents('.item').get(0).getAttribute('id')
+            $.ajax("/updatingOrderStatus1/" + id, {
+                type:'GET',
+                contentType:false,
+                processData:false,
+                success:function (response){
+                    if (response){
+                        alert("操作成功！")
+                    }
+                    else alert("操作失败！")
+                },
+                error:function (){
+                    alert("操作失败！")
+                }
+            })
+        })
+        $('.confirmDeliver').click(function () {
+            let id = $(this).parents('.item').get(0).getAttribute('id')
+            $.ajax("/updatingOrderStatus2/" + id, {
+                type:'GET',
+                contentType:false,
+                processData:false,
+                success:function (response){
+                    if (response){
+                        alert("操作成功！")
+                    }
+                    else alert("操作失败！")
+                }
+            })
+        })
+        $('.confirmReceive').click(function () {
+            let id = $(this).parents('.item').get(0).getAttribute('id')
+            $.ajax("/updatingOrderStatus3/" + id, {
+                type:'GET',
+                contentType:false,
+                processData:false,
+                success:function (response){
+                    if (response){
+                        alert("操作成功！")
+                    }
+                    else alert("操作失败！")
+                }
+            })
+        })
+    })
+</script>
+<body>
+<!-- header end -->
+<!-- body start -->
+<div class="ui modal" id="noStall" th:if="${param.noStall}">
+    <div class="ui center aligned header">您还没有创建商铺！</div>
+    <div class="content" style="text-align: center">您还没有创建商铺，赶紧来创建吧！</div>
+    <div class="actions">
+        <div class="ui positive button">点此按钮创建</div>
+    </div>
+</div>
+<div th:if="${session.user_type} == 'user'">
+    <div th:replace="~{left_menu_user::left_menu}"></div>
+</div>
+<div th:if="${session.user_type} == 'stall'">
+    <div th:replace="~{left_menu_stall::left_menu}"></div>
+</div>
+<div th:if="${session.user_type} == 'canteen'">
+    <div th:replace="~{left_menu_canteen::left_menu}"></div>
+</div>
+
+<div th:if="${session.user_type} == 'user'">
+    <div th:replace="~{userspace_user::userspace_content}"></div>
+</div>
+<div th:if="${session.user_type} == 'stall'">
+    <div th:if="not ${dish_page}">
+        <div th:replace="~{userspace_stall::userspace_content}"></div>
+    </div>
+    <div th:if="${dish_page}">
+        <div th:replace="~{userspace_dish::userspace_content}"></div>
+    </div>
+</div>
+<div th:if="${session.user_type} == 'canteen'">
+    <div th:replace="~{userspace_canteen::userspace_content}"></div>
+</div>
+<!-- footer -->
+</body>
+</html>

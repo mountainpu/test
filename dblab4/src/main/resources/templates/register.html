@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>注册</title>
+    <link href="/Semantic-UI-CSS-master/semantic.min.css" rel="stylesheet">
+    <link href="/css/register.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+
+</head>
+
+<script>
+    $(function () {
+        $('.modal').modal('show');
+        $('.ui.dropdown').dropdown();
+        $.fn.form.settings.rules.checkUsername = function (value) {
+            let username = $('#username').val()
+            let res
+            $.ajax("checkUsername?username="+username, {
+                type:'GET',
+                contentType:false,
+                processData:false,
+                async:false,
+                success:function (response){
+                    res = response;
+                }
+            })
+            return res
+        }
+        $('.ui.form').form({
+            on:'blur',
+            inline:true,
+            fields:{
+                username:{
+                    identifier:'username',
+                    rules:[{
+                        type: 'maxLength[20]',
+                        prompt:'用户名最多20个字符',
+                    },{
+                        type: 'empty',
+                        prompt: '用户名不能为空',
+                    },{
+                        type: 'checkUsername[]',
+                        prompt: '该用户名已经被注册了'
+                    }]
+                },
+                password:{
+                    identifier: 'password',
+                    rules: [{
+                        type:'maxLength[30]',
+                        prompt:'密码最多30个字符',
+                    },{
+                        type: 'empty',
+                        prompt: '密码不能为空'
+                    }]
+                },
+                password_confirm:{
+                    identifier:'password_confirm',
+                    rules:[{
+                        type:'match[password]',
+                        prompt:'输入密码不一致'
+                    }]
+                },
+                cellphone:{
+                    identifier:'cellphone',
+                    rules:[{
+                        type:'regExp[[0-9]{11}]',
+                        prompt:'手机号格式错误！'
+                    }]
+                }
+            }
+        })
+    })
+</script>
+<body>
+<!-- header start -->
+<div class="<header>" th:replace="~{header::header}"></div>
+<!-- header end -->
+
+
+<div class="ui tiny modal" id="success_modal" th:if="${param.accept}">
+    <i class="ui close icon"></i>
+    <div class="ui center aligned header">注册成功</div>
+    <div class="content" style="text-align: center">您已经注册成功，快来体验吧</div>
+    <div class="actions">
+        <div class="ui positive button" onclick="window.location.href='login'">去登陆</div>
+    </div>
+</div>
+<div class="main">
+    <div class="ui horizontal divider">注册</div>
+    <div class="register-form">
+        <form class="ui form" method="post" th:action="@{/registering}">
+            <div class="required field" id="username_filed">
+                <label for="username">用户名</label>
+                <input class="ui input" id="username" name="username" required type="text"><span></span>
+            </div>
+            <div class="required field">
+                <label for="password">密码</label>
+                <input autocomplete="new-password" class="ui input" id="password" name="password" required
+                       type="password">
+            </div>
+            <div class="required field">
+                <label for="password_confirm">确认密码</label>
+                <input autocomplete="off" class="ui input" id="password_confirm" name="password_confirm" required
+                       type="password">
+            </div>
+            <div class="required field">
+                <label for="cellphone">手机号码</label>
+                <input class="ui input" id="cellphone" name="cellphone" required type="text" maxlength="11">
+            </div>
+            <div class="required field">
+                <div class="required field">
+                    <label for="user_type">你是？</label>
+                    <select class="ui dropdown" id="user_type" name="user_type" required>
+                        <option value="">选择用户类别</option>
+                        <option value="1">普通用户</option>
+                        <option value="2">食堂管理员</option>
+                        <option value="3">商铺管理员</option>
+                    </select>
+                </div>
+            </div>
+            <button class="ui primary button" id="submit" style="width: 90%; margin-top: 1em;margin-left:5%"
+                    type="submit">注册
+            </button>
+        </form>
+        <div class="form_addition">
+            <a href="/login">登录</a>
+            &emsp;&emsp;
+            <a href="/help/pwd">忘记密码</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- footer start -->
+<div class="<footer>" th:replace="~{footer::footer}"></div>
+
+<!-- footer end -->
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lab.dblab4.mapper.stallMapper">
+    <insert id="insert" parameterType="stall" useGeneratedKeys="true">
+        insert into stall(user_id, canteen_id, stall_name, stall_desp) values (#{user_id}, #{canteen_id}, #{stall_name}, #{stall_desp})
+        <selectKey resultType="int" keyProperty="stall_id" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+    <select id="findByUserId" parameterType="int" resultType="stall">
+        select * from stall where user_id = #{user_id}
+    </select>
+    <select id="findByCanteen" parameterType="canteen" resultType="stall">
+        select * from stall where canteen_id = #{canteen_id}
+    </select>
+    <select id="find" parameterType="stall" resultType="stall">
+        select * from stall where stall_id = #{stall_id}
+    </select>
+    <update id="update" parameterType="stall">
+        update stall set canteen_id = #{canteen_id}, stall_name = #{stall_name}, stall_desp = #{stall_desp} where stall_id = #{stall_id}
+    </update>
+</mapper>

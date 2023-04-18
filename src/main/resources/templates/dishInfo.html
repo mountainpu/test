@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>上传商品</title>
+    <link href="/css/upload.css" rel="stylesheet">
+    <link href="/Semantic-UI-CSS-master/semantic.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="/Semantic-UI-CSS-master/semantic.min.js"></script>
+</head>
+<script>
+    $(function () {
+        $('.ui.dropdown').dropdown()
+        let max = [[${dish.getInventory}]]
+        $('.ui.form').form({
+            on:'blur',
+            inline:true,
+            fields:{
+                name:{
+                    identifier:'dish_number',
+                    rules:[{
+                        type: 'integer[1..'+max+']',
+                        prompt:'菜品数量超出可选范围',
+                    },{
+                        type: 'empty',
+                        prompt: '菜品数量不能为空',
+                    }]
+                }
+            }
+        })
+    })
+</script>
+
+<body>
+<div class="<header>" th:replace="~{header::header}"></div>
+<!-- header end -->
+<div class="ui horizontal divider">菜品信息</div>
+
+<div class="ui modal" id="success_modal" th:if="${param.success}">
+    <i class="close icon"></i>
+    <div class="ui center aligned header">发布成功</div>
+    <div class="content" style="text-align: center">您的商品已经发布成功，快来看看吧</div>
+    <div class="actions">
+        <div class="ui positive button" onclick="window.location.href='/index'">去看看</div>
+    </div>
+</div>
+
+<div class="ui modal" id="fail_modal" th:if="${param.fail}">
+    <i class="close icon"></i>
+    <div class="ui center aligned header">发布失败</div>
+    <div class="content" style="text-align: center">由于服务器原因，您的商品失败，请联系开发人员以获得帮助</div>
+    <div class="actions">
+        <div class="ui negative button">好的</div>
+    </div>
+</div>
+<div class="post_form">
+    <div class="ui relaxed list">
+        <div class="item">
+            <div class="ui segment">
+                <h1 class="header" th:text="${dish.getDish_name}">菜品名称</h1>
+                <div class="description" th:text="${dish.getDish_desp}">菜品描述</div>
+            </div>
+        </div>
+        <div class="item">
+            <div class="ui segment">
+                <h3>简要信息：</h3>
+                <p th:text="'单价：'+${dish.getPrice}">单价:</p>
+                <p id="inventory" th:text="'库存：'+${dish.getInventory}">库存:</p>
+                <p th:text="'类别：'+${dish.getCategory_name}">类别:</p>
+                <p th:text="'商铺：'+${dish.getStall_name}">商铺:</p>
+                <p th:text="'食堂：'+${dish.getCanteen_name}">食堂:</p>
+                <p th:text="'上新时间：'+${dish.getLast_update}">上新时间:</p>
+            </div>
+        </div>
+    </div>
+    <div class="item">
+        <div class="ui segment">
+            <form action="/confirmOrder" class="ui form">
+                <input name="dish_id" th:value="${dish.getDish_id}" type="hidden">
+                <div class="two fields">
+                    <div class="required field">
+                        <label for="dish_flavour">风味</label>
+                        <select class="ui dropdown" id="dish_flavour" name="flavour_id" required>
+                            <option value="">选择菜品风味</option>
+                            <option th:each="flavour:${flavourList}" th:text="${flavour.getFlavour_desp}"
+                                    th:value="${flavour.getFlavour_id}"></option>
+                        </select>
+                    </div>
+                    <div class="required field">
+                        <label for="dish_number">数量</label>
+                        <input id="dish_number" name="dish_number" type="number" required>
+                    </div>
+                </div>
+                <button class="ui primary button" type="submit">确认购买</button>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- footer start -->
+<div class="<footer>" th:replace="~{footer::footer}"></div>
+
+</body>
+
+</html>
+
